@@ -1,0 +1,2 @@
+service: myFirstService
+frameworkVersion: '3'

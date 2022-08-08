@@ -1,0 +1,41 @@
+Resources:
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: servicePipeline
+      RoleArn: arn:aws:iam::262702322665:role/aaa
+      ArtifactStore:
+        Location: shakirovruslanshakirov
+        Type: S3
+      Stages:
+        - Name: Checkout
+          Actions:
+            - InputArtifacts: []
+              Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: 1
+                Provider: GitHub
+              OutputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                Repo: demo
+                Owner: shakirovruslanjob
+                Branch: main
+                OAuthToken: ${ssm:github}
+        - Name: Build
+          Actions:
+            - Name: Build
+              InputArtifacts:
+                - Name: SourceOutput
+              OutputArtifacts:
+                - Name: BuildOutput
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref Build
+

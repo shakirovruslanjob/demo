@@ -1,0 +1,29 @@
+#AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  Build:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_LARGE
+        Image: aws/codebuild/standard:5.0
+        Type: LINUX_CONTAINER
+        PrivilegedMode: true
+      Name: pipeline-build
+      ServiceRole: aaa
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          artifacts:
+            name: build
+            files:
+              - target/hello-dev.jar
+          phases:
+            install:
+              runtime-versions:
+                java: corretto11
+            build:
+              commands:
+                - mvn clean package

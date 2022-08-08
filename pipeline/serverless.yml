@@ -1,0 +1,18 @@
+service: ${self:custom.serviceName}
+frameworkVersion: ${self:custom.version}
+
+provider:
+  name: aws
+  region: eu-central-1
+  profile: demo
+  deploymentBucket: shakirovruslanshakirov
+
+custom:
+  serviceName: pipeline
+  branch: master
+  version: '3'
+
+resources:
+  - Description: Pipeline
+  - ${file(pipeline.yml)}
+  - ${file(build.yml)}
